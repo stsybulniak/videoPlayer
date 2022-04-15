@@ -14,7 +14,7 @@ const stat = util.promisify(fs.stat);
 const cp = util.promisify(fs.copyFile);
 const del = util.promisify(fs.unlink);
 
-const minChunk = 1024 ** 2 * 2; // 2 Mb
+const CHUNK_SIZE = 10 ** 6;
 
 router.get('/videos', async (req, res) => {
   const list = await File.find({});
@@ -28,11 +28,12 @@ router.post('/videos/upload', (req, res) => {
   });
 
   busboy.on('file', async (fieldname, file, { filename, mimeType }) => {
+    console.log({ filename, mimeType }, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
     const fileName = `${Date.now()}-${filename}`;
     const filePath = path.resolve(__dirname, `../../assets/${fileName}`);
     file.on('end', async () => {
       const { size } = await stat(filePath);
-      let thumbnail= '';
+      let thumbnail= 'test';
       try {
         const thumb = await thumbsupply.generateThumbnail(filePath);
         const thumbData = path.parse(thumb);
@@ -51,6 +52,9 @@ router.post('/videos/upload', (req, res) => {
         mimeType,
         size,
       });
+
+
+      console.log(file)
       await file.save();
       console.log('File [' + fieldname + '] Finished');
       console.log(file);
@@ -78,13 +82,13 @@ router.get('/videos/:id', async (req, res) => {
   if (range) {
     const parts = range.replace(/bytes=/, '').split('-');
     const start = parseInt(parts[0], 10);
-    const end = parts[1] ? parseInt(parts[1], 10) : start + minChunk;
-    const chunksize = end - start + 1;
+    const end = Math.min(start + CHUNK_SIZE, fileEntity.size - 1);
+    const contentLength = end - start + 1;
     const file = fs.createReadStream(filePath, { start, end });
     const head = {
       'Content-Range': `bytes ${start}-${end}/${fileEntity.size}`,
       'Accept-Ranges': 'bytes',
-      'Content-Length': chunksize,
+      'Content-Length': contentLength,
       'Content-Type': fileEntity.mimeType,
     };
     res.writeHead(PARTIAL_CONTENT, head);

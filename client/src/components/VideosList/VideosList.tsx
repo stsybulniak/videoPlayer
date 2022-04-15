@@ -16,11 +16,12 @@ const VideosList: FC<IVideosListProps> = (props) => {
           <div key={file._id} className='VideosList__item'>
             <ReactPlayer
               light={`/api/static/${file.thumbnail}`}
-              playing
               width='100%'
               height='100%'
               url={`/api/videos/${file._id}`}
               controls
+              pip={false}
+              playing
             />
           </div>
         );

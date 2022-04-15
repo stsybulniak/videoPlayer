@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { FC, useEffect, useState } from 'react';
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import VideosList from '../../components/VideosList/VideosList';
 
 export interface IFile {
@@ -20,7 +21,7 @@ const VideosPage: FC = () => {
     })
   }, []);
 
-  return <VideosList files={files} />;
+  return <ErrorBoundary><VideosList files={files} /></ErrorBoundary>;
 };
 
 export default VideosPage;

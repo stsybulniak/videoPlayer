@@ -16,7 +16,7 @@ interface FileDoc extends mongoose.Document {
   thumbnail: string;
 }
 
-interface TicketModel extends mongoose.Model<FileDoc> {
+interface FileModel extends mongoose.Model<FileDoc> {
   build(attrs: FileAttrs): FileDoc;
 }
 
@@ -32,7 +32,7 @@ const fileSchema = new mongoose.Schema(
     },
     thumbnail: {
       type: String,
-      required: true,
+      required: false,
     },
     size: {
       type: Number,
@@ -52,6 +52,6 @@ fileSchema.statics.build = (attrs: FileAttrs) => {
   return new File(attrs);
 };
 
-const File = mongoose.model<FileDoc, TicketModel>('File', fileSchema);
+const File = mongoose.model<FileDoc, FileModel>('File', fileSchema);
 
 export { File };

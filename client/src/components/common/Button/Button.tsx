@@ -2,7 +2,22 @@ import { FC } from 'react';
 import cn from 'classnames';
 import './Button.scss';
 
-const Button: FC<Record<string, any>> = (props) => {
+interface IButton {
+  primary?: boolean;
+  disabled?: boolean;
+  large?: boolean;
+  fullWidth?: boolean;
+  small?: boolean;
+  medium?: boolean;
+  className?: string;
+  onClick: () => void;
+  children: any;
+  type?: 'button' | 'submit' | 'reset';
+  id?: string;
+}
+
+const Button: FC<IButton> = (props) => {
+  const { type = 'button' } = props;
 
   const classes = {
     'Button--primary': props.primary,
@@ -18,12 +33,12 @@ const Button: FC<Record<string, any>> = (props) => {
       id={props.id}
       className={cn('Button', props.className, classes)}
       disabled={props.disabled}
-      onClick={!props.disabled ? props.onClick : null}
-      type={props.type}
+      onClick={!props.disabled ? props.onClick : undefined}
+      type={type}
     >
       {props.children}
     </button>
-  )
+  );
 };
 
 export default Button;
