@@ -1,16 +1,20 @@
-import express from "express";
+import { app } from './app';
+import mongoose from 'mongoose';
 
-const app = express();
-const { PORT = 5000 } = process.env;
+const { PORT = '5000' } = process.env;
 
-// define a route handler for the default home page
-app.get( "/", ( req, res ) => {
-    // render the index template
-    res.send( {hello: "index!"} );
-} );
+const start = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    console.log('Connected to MongoDb');
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 
-// start the express server
-app.listen( PORT, () => {
-    // tslint:disable-next-line:no-console
-    console.log( `server started at http://localhost:${ PORT }` );
-} );
+  app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`);
+  });
+};
+
+start();

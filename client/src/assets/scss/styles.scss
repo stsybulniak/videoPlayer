@@ -1,0 +1,42 @@
+@import 'node_modules/normalize-scss/sass/normalize';
+@import './variables.scss';
+@import './screenVariables.scss';
+@import '../fonts/roboto.scss';
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  // This defines what 1rem is
+  font-size: 62.5%;
+
+  // @media only screen and (max-width: $bp-large) {
+  //   font-size: 80%;
+  // }
+  // @media only screen and (max-width: $bp-medium) {
+  //   font-size: 65%;
+  // }
+  // @media only screen and (max-width: $bp-small) {
+  //   font-size: 50%;
+  // }
+}
+
+body {
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+  width: 100%;
+  font-size: 1.4rem;
+
+  #root {
+    height: 100%;
+    width: 100%;
+  }
+}

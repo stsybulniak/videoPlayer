@@ -1,0 +1,15 @@
+.Uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  &__progress{
+    margin-top: 1rem;
+    height: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}

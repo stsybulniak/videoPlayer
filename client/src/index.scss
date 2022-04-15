@@ -1,0 +1,9 @@
+.route-links {
+  a {
+    all: unset;
+    &:not(:last-child) {
+      margin-right: 5rem;
+    }
+    cursor: pointer;
+  }
+}

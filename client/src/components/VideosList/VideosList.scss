@@ -1,0 +1,11 @@
+.VideosList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  &__item {
+    margin: 2rem;
+    width: 35rem;
+    height: 20rem;
+  }
+}

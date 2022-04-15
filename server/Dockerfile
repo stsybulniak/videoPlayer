@@ -12,4 +12,4 @@ RUN apk add ffmpeg
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start:prod"]

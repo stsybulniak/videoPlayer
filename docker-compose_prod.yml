@@ -2,34 +2,26 @@ version: '3'
 services:
   mongodb:
     image: 'mongo:5.0.7'
-    ports:
-      - 27017:27017
     command: mongod
   nginx:
     restart: always
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       context: ./nginx
     ports:
-      - "3050:80"
+      - "${APP_PORT}:80"
   api:
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       context: ./server
-    env_file:
-      - server/.env
     volumes:
-      - /app/node_modules
       - ./server:/app
     environment:
       - NODE_ENV
       - MONGO_URL
-    ports:
-      - "5000:5000"
   client:
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       context: ./client
     volumes:
-      - /app/node_modules
       - ./client:/app
