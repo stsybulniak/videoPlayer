@@ -1,9 +1,11 @@
 version: '3'
 services:
   mongodb:
+    container_name: "${PREFIX_CONTAINER}-mongo"
     image: 'mongo:5.0.7'
     command: mongod
   nginx:
+    container_name: "${PREFIX_CONTAINER}-nginx"
     restart: always
     build:
       dockerfile: Dockerfile
@@ -11,6 +13,7 @@ services:
     ports:
       - ${APP_PORT}:80
   api:
+    container_name: "${PREFIX_CONTAINER}-api"
     build:
       dockerfile: Dockerfile
       context: ./server
@@ -22,6 +25,7 @@ services:
       - NODE_ENV
       - MONGO_URL
   client:
+    container_name: "${PREFIX_CONTAINER}-client"
     build:
       dockerfile: Dockerfile
       context: ./client

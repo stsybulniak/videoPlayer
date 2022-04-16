@@ -1,4 +1,4 @@
-# Deploy
+# ReedMe
 
 ## Prepare
 
@@ -6,7 +6,9 @@ Copy files .env.example and rename them just .env in root and client directories
 
 You should use node v 16
 
+
 Switch to directory server and execute npm install
+
 Switch to directory client and execute npm install
 
 # Develop
@@ -15,15 +17,22 @@ Switch to directory client and execute npm install
 
     After build and create containers application should be available on http://localhost:3050
 
+    If error about node-sass will apppear run
+
+    docker exec -it video-upload-client npm rebuild node-sass
+
+    and restart 
+
+    docker-compose up
+
 # Prod
-    docker-compose -f docker-compose.prod.yml -f docker-compose.letsencrypt.yml -f docker-compose.metrics.yml up -d
+    docker-compose -f docker-compose.prod.yml up -d
 
 # tests
 
-In order to execute tests you should know docker containers id for api and client servises
+To execute tests run
 
-Execute docker ps to see container's info
+docker exec -it video-upload-client npm test
 
-To execute tests:
-docker exec -it containerId npm test
+docker exec -it video-upload-api npm test
  
