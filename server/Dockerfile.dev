@@ -1,4 +1,4 @@
-FROM node:16.14.2-alpine AS node
+FROM node:16.14.2 AS node
 
 WORKDIR '/app'
 
@@ -6,9 +6,10 @@ COPY ./package.json ./
 COPY ./package-lock.json ./
 RUN npm install
 
-RUN apk update
-RUN apk add
-RUN apk add ffmpeg
+RUN apt update
+
+RUN apt install libcurl4
+RUN apt install ffmpeg -y
 
 COPY . .
 

@@ -14,7 +14,15 @@ const stat = util.promisify(fs.stat);
 const cp = util.promisify(fs.copyFile);
 const del = util.promisify(fs.unlink);
 
-const CHUNK_SIZE = 10 ** 6;
+const generateThumb = (path: string) => {
+  return new Promise<string>((resolve) => {
+    thumbsupply.generateThumbnail(path).then((thumb: string) => {
+      resolve(thumb);
+    });
+  });
+};
+
+const CHUNK_SIZE = 1024 ** 2 * 2;
 
 router.get('/videos', async (req, res) => {
   const list = await File.find({});
@@ -28,17 +36,19 @@ router.post('/videos/upload', (req, res) => {
   });
 
   busboy.on('file', async (fieldname, file, { filename, mimeType }) => {
-    console.log({ filename, mimeType }, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
     const fileName = `${Date.now()}-${filename}`;
     const filePath = path.resolve(__dirname, `../../assets/${fileName}`);
+    const outStream = fs.createWriteStream(filePath);
+    file.pipe(outStream);
+
     file.on('end', async () => {
       const { size } = await stat(filePath);
-      let thumbnail= 'test';
+      let thumbnail = '';
       try {
-        const thumb = await thumbsupply.generateThumbnail(filePath);
+        const thumb = await generateThumb(filePath);
         const thumbData = path.parse(thumb);
         const fileData = path.parse(filePath);
-        thumbnail = `${fileData.name}${thumbData.ext}`
+        thumbnail = `${fileData.name}${thumbData.ext}`;
         await cp(thumb, path.resolve(__dirname, `../../public/${thumbnail}`));
         await del(thumb);
       } catch (err) {
@@ -52,22 +62,17 @@ router.post('/videos/upload', (req, res) => {
         mimeType,
         size,
       });
-
-
-      console.log(file)
       await file.save();
+
       console.log('File [' + fieldname + '] Finished');
-      console.log(file);
+
+      res.writeHead(OK, {
+        Connection: 'close',
+      });
+      res.end();
     });
-    const outStream = fs.createWriteStream(filePath);
-    file.pipe(outStream);
   });
-  busboy.on('finish', () => {
-    res.writeHead(OK, {
-      Connection: 'close',
-    });
-    res.end();
-  });
+
   return req.pipe(busboy);
 });
 

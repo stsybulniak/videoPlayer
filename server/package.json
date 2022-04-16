@@ -6,12 +6,11 @@
   "scripts": {
     "start:prod": "tsc && node build/index.js",
     "dev": "NODE_ENV=development ts-node-dev --poll src/index.ts",
-    "test": "jest --watchAll --no-cache --coverage"
+    "test": "jest --no-cache --coverage --detectOpenHandles"
   },
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "testTimeout": 15000,
     "setupFilesAfterEnv": [
       "./src/test/setup.ts"
     ]
@@ -23,7 +22,7 @@
     "busboy": "^1.5.0",
     "express": "^4.17.3",
     "http-status-codes": "^2.2.0",
-    "mongoose": "^6.2.11",
+    "mongoose": "^6.3.0",
     "thumbsupply": "^0.4.0"
   },
   "devDependencies": {
